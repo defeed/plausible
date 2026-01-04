@@ -9,3 +9,5 @@
 !Dockerfile
 !config/
 !config/deploy.yml
+!.kamal/
+!.kamal/secrets
