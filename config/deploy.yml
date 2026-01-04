@@ -31,12 +31,13 @@ ssh:
 env:
   clear:
     BASE_URL: https://potato.artempakk.com
-    DATABASE_URL: postgres://postgres:postgres@plausible-db:5432/plausible
     CLICKHOUSE_DATABASE_URL: http://plausible-events-db:8123/plausible
     DISABLE_REGISTRATION: invite_only
     TMPDIR: /var/lib/plausible/tmp
   secret:
     - SECRET_KEY_BASE
+    - POSTGRES_PASSWORD
+    - DATABASE_URL
 
 volumes:
   - plausible-data:/var/lib/plausible
@@ -48,8 +49,9 @@ accessories:
     port: 5432
     env:
       clear:
-        POSTGRES_PASSWORD: postgres
         POSTGRES_DB: plausible
+      secret:
+        - POSTGRES_PASSWORD
     directories:
       - data:/var/lib/postgresql/data
     options:
