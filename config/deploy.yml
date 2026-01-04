@@ -1,0 +1,76 @@
+service: plausible
+
+image: ghcr.io/defeed/plausible
+
+servers:
+  web:
+    hosts:
+      - 91.98.133.122
+    cmd: sh -c "/entrypoint.sh db createdb && /entrypoint.sh db migrate && /entrypoint.sh run"
+    options:
+      ulimit: nofile=65535:65535
+
+proxy:
+  ssl: true
+  host: potato.artempakk.com
+  app_port: 8000
+
+registry:
+  server: ghcr.io
+  username: defeed
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+builder:
+  arch: amd64
+
+ssh:
+  user: app
+  port: 2222
+
+env:
+  clear:
+    BASE_URL: https://potato.artempakk.com
+    DATABASE_URL: postgres://postgres:postgres@plausible-db:5432/plausible
+    CLICKHOUSE_DATABASE_URL: http://plausible-events-db:8123/plausible
+    DISABLE_REGISTRATION: invite_only
+    TMPDIR: /var/lib/plausible/tmp
+  secret:
+    - SECRET_KEY_BASE
+
+volumes:
+  - plausible-data:/var/lib/plausible
+
+accessories:
+  db:
+    image: postgres:16-alpine
+    host: 91.98.133.122
+    port: 5432
+    env:
+      clear:
+        POSTGRES_PASSWORD: postgres
+        POSTGRES_DB: plausible
+    directories:
+      - data:/var/lib/postgresql/data
+    options:
+      health-cmd: "pg_isready -U postgres"
+      health-start-period: 60s
+
+  events-db:
+    image: clickhouse/clickhouse-server:24.12-alpine
+    host: 91.98.133.122
+    port: "8123:8123"
+    env:
+      clear:
+        CLICKHOUSE_SKIP_USER_SETUP: "1"
+    directories:
+      - event-data:/var/lib/clickhouse
+      - event-logs:/var/log/clickhouse-server
+    files:
+      - clickhouse/logs.xml:/etc/clickhouse-server/config.d/logs.xml
+      - clickhouse/ipv4-only.xml:/etc/clickhouse-server/config.d/ipv4-only.xml
+      - clickhouse/low-resources.xml:/etc/clickhouse-server/config.d/low-resources.xml
+    options:
+      ulimit: nofile=262144:262144
+      health-cmd: "wget --no-verbose --tries=1 -O - http://127.0.0.1:8123/ping || exit 1"
+      health-start-period: 60s

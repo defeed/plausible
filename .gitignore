@@ -6,3 +6,6 @@
 !README.md
 !LICENSE
 !.gitignore
+!Dockerfile
+!config/
+!config/deploy.yml
