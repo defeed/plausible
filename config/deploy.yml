@@ -45,8 +45,8 @@ volumes:
 accessories:
   db:
     image: postgres:16-alpine
-    host: 91.98.133.122
-    port: 5432
+    roles:
+      - web
     env:
       clear:
         POSTGRES_DB: plausible
@@ -60,8 +60,8 @@ accessories:
 
   events-db:
     image: clickhouse/clickhouse-server:24.12-alpine
-    host: 91.98.133.122
-    port: "8123:8123"
+    roles:
+      - web
     env:
       clear:
         CLICKHOUSE_SKIP_USER_SETUP: "1"
