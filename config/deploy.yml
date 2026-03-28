@@ -14,7 +14,9 @@ deploy_timeout: 120
 
 proxy:
   ssl: true
-  host: potato.artempakk.com
+  hosts:
+    - potato.artempakk.com
+    - hey.sawatdi.com
   app_port: 8000
   healthcheck:
     path: /api/health
