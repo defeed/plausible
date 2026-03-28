@@ -10,10 +10,15 @@ servers:
     options:
       ulimit: nofile=65535:65535
 
+deploy_timeout: 120
+
 proxy:
   ssl: true
   host: potato.artempakk.com
   app_port: 8000
+  healthcheck:
+    path: /api/health
+    interval: 3
 
 registry:
   server: ghcr.io
