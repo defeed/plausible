@@ -59,7 +59,7 @@ accessories:
       health-start-period: 60s
 
   events-db:
-    image: clickhouse/clickhouse-server:24.12-alpine
+    image: clickhouse/clickhouse-server:25.8-alpine
     roles:
       - web
     env:

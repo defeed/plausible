@@ -11,7 +11,7 @@ services:
       start_period: 1m
 
   plausible_events_db:
-    image: clickhouse/clickhouse-server:24.12-alpine
+    image: clickhouse/clickhouse-server:25.8-alpine
     restart: always
     volumes:
       - event-data:/var/lib/clickhouse
@@ -34,7 +34,7 @@ services:
       start_period: 1m
 
   plausible:
-    image: ghcr.io/plausible/community-edition:v3.1.0
+    image: ghcr.io/plausible/community-edition:v3.2.0
     restart: always
     command: sh -c "/entrypoint.sh db createdb && /entrypoint.sh db migrate && /entrypoint.sh run"
     depends_on:
