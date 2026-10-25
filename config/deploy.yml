@@ -41,10 +41,12 @@ env:
     CLICKHOUSE_DATABASE_URL: http://plausible-events-db:8123/plausible
     DISABLE_REGISTRATION: invite_only
     TMPDIR: /var/lib/plausible/tmp
+    GOOGLE_CLIENT_ID: 270839581740-scpojcjc09m469ch9af546do0na2tl5l.apps.googleusercontent.com
   secret:
     - SECRET_KEY_BASE
     - POSTGRES_PASSWORD
     - DATABASE_URL
+    - GOOGLE_CLIENT_SECRET
 
 volumes:
   - plausible-data:/var/lib/plausible
